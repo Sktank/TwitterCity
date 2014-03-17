@@ -51,6 +51,7 @@ twit.stream('statuses/sample', function(stream) {
     });
 });
 
+
 // Google geo coder
 
 request('http://maps.googleapis.com/maps/api/geocode/json?address=New York,NJ&sensor=false', function (error, response, body) {

@@ -3,10 +3,19 @@ html
     head
         title Data Visualizer
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js')
-        link(rel = 'stylesheet' href='//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css')
+        link(rel='stylesheet' href='//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css')
+        link(rel='stylesheet' href='/main.css')
         script(type='text/javascript' src="/socket.io/socket.io.js")
         script(type='text/javascript' src="/client.js")
     body
         div.container
             header
-                h1 Hello World
+                h1 Litter
+                h3 The Location Based Twitter App
+
+
+            div.container.container-main
+            form.form-inline
+                div#searchControls.form-group
+                    input(type='text', placeholder="Enter City").form-control#searchInput
+                button#search.btn.btn-primary Search
