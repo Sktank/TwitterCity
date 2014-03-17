@@ -87,8 +87,10 @@ $(function() {
         var mapCanvas = document.getElementById("map-canvas");
         console.log(mapCanvas);
         map = new google.maps.Map(mapCanvas, mapOptions);
-    }
 
+      }
+
+    // clear the map
     function clearMap() {
         for (var i = 0; i < markersArray.length; i++ ) {
             markersArray[i].setMap(null);

@@ -23,3 +23,7 @@
     margin-left: 20px;
 }
 
+#map-canvas {
+    border: 1px solid black;
+}
+
