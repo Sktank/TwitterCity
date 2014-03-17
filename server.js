@@ -51,22 +51,30 @@ io.sockets.on('connection', function (socket) {
 
     //
     socket.on('search', function(city) {
-        cityStream(city);
+        cityStream(socket, city);
+    });
+
+    socket.on('stop', function() {
+        socket.stream.destroy();
     });
 
 
     socket.on('disconnect', function() {
-
+        if (socket.stream) {
+            socket.stream.destroy();
+        }
     })
 });
 
 
 
 // Twitter Stream
-function startStream(boundingBox) {
-    twit.stream('statuses/sample', function(stream) {
+function startStream(socket, boundingBox) {
+    twit.stream('statuses/filter', {'locations':boundingBox}, function(stream) {
+        socket.stream = stream;
         stream.on('data', function (data) {
             console.log(data);
+            socket.emit('tweet', {name: data.user.name, message: data.text})
         });
     });
 }
@@ -74,17 +82,25 @@ function startStream(boundingBox) {
 
 
 // Google geo coder
-function cityStream(city) {
+function cityStream(socket, city) {
     request('http://maps.googleapis.com/maps/api/geocode/json?address=' + city + '&sensor=false', function (error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log(body); // Print the lookup
+            var info = eval("value = (" + body + ")");
+            if (info.results) {
+                var bestMatch = info.results[0],
+                    bounds = bestMatch.geometry.bounds;
 
-
+                var twitterBoundingBox = formatBoundingBox(bounds);
+                startStream(socket, twitterBoundingBox);
+            }
         }
     });
 }
 
 function formatBoundingBox(geoLocation) {
+    return geoLocation.southwest.lng + "," + geoLocation.southwest.lat + "," +
+           geoLocation.northeast.lng + "," + geoLocation.northeast.lat + ",";
 
 }
 

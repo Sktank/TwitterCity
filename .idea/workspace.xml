@@ -22,10 +22,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="server.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="server.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="70" column="7" selection-start="1514" selection-end="1514" vertical-scroll-proportion="0.47801417">
+            <state line="58" column="7" selection-start="1338" selection-end="1338" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -34,7 +34,7 @@
       <file leaf-file-name="home.jade" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/home.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="36" selection-start="787" selection-end="787" vertical-scroll-proportion="0.0">
+            <state line="22" column="0" selection-start="859" selection-end="859" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -43,16 +43,16 @@
       <file leaf-file-name="main.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/main.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="18" selection-start="36" selection-end="36" vertical-scroll-proportion="0.0">
+            <state line="10" column="0" selection-start="140" selection-end="140" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="client.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="client.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/client.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="0" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0">
+            <state line="17" column="25" selection-start="382" selection-end="382" vertical-scroll-proportion="0.3858156">
               <folding />
             </state>
           </provider>
@@ -68,15 +68,15 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
+        <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/public/main.css" />
         <option value="$PROJECT_DIR$/views/home.jade" />
         <option value="$PROJECT_DIR$/public/client.js" />
-        <option value="$PROJECT_DIR$/server.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="152" />
+    <option name="x" value="102" />
     <option name="y" value="22" />
     <option name="width" value="1388" />
     <option name="height" value="828" />
@@ -210,6 +210,24 @@
     <list size="0" />
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="DETECT_NESTED_COPIES" value="true" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <option name="IGNORE_EXTERNALS" value="false" />
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="7ebdabdb-80dd-4d76-b5bd-ffadbe8761a2" name="Default" comment="" />
@@ -219,7 +237,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="152" y="22" width="1388" height="828" extended-state="0" />
+    <frame x="102" y="22" width="1388" height="828" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -296,30 +314,30 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/main.css">
+    <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="18" selection-start="36" selection-end="36" vertical-scroll-proportion="0.0">
+        <state line="58" column="7" selection-start="1338" selection-end="1338" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/home.jade">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="36" selection-start="787" selection-end="787" vertical-scroll-proportion="0.0">
+        <state line="22" column="0" selection-start="859" selection-end="859" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="0" selection-start="140" selection-end="140" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/client.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="7" selection-start="1514" selection-end="1514" vertical-scroll-proportion="0.47801417">
+        <state line="17" column="25" selection-start="382" selection-end="382" vertical-scroll-proportion="0.3858156">
           <folding />
         </state>
       </provider>
