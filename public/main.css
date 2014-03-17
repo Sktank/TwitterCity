@@ -3,8 +3,8 @@
 }
 
 #tweet-box {
-    max-height: 500px;
-    width: 80%;
+    height: 500px;
+    width: 100%;
     border: 1px solid black;
     overflow: auto;
     margin-bottom: 100px;
@@ -22,3 +22,4 @@
 .litter-btn {
     margin-left: 20px;
 }
+

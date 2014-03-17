@@ -10,12 +10,12 @@
 // Node Imports
 
 var express = require('express'),
-    jade = require('jade'),
+    ejs = require('ejs'),
     http = require('http'),
     twitter = require('ntwitter'),
     request = require('request'),
     app = express(),
-    server = http.createServer(app),
+    server = http.createServer(app);
     io = require('socket.io').listen(server);
 
 
@@ -23,8 +23,7 @@ var express = require('express'),
 
 server.listen(4000);
 app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
-app.set("view options", { layout: false });
+app.engine('html', ejs.renderFile);
 app.use(express.static(__dirname + '/public'));
 
 var twit = new twitter({
@@ -38,12 +37,11 @@ var twit = new twitter({
 // Routes
 app.get('/', function (req, res) {
     res.render(
-        'home.jade'
+        'home.html'
     );
 });
 
 // websockets connection
-
 io.sockets.on('connection', function (socket) {
 
     // add user to language queue
@@ -73,13 +71,15 @@ function startStream(socket, boundingBox) {
     twit.stream('statuses/filter', {'locations':boundingBox}, function(stream) {
         socket.stream = stream;
         stream.on('data', function (data) {
-            console.log(data);
-            socket.emit('tweet', {name: data.user.name, message: data.text})
+            var tweetLocation;
+            if(data.geo) {
+                tweetLocation = data.geo.coordinates;
+                socket.emit('tweet', {name: data.user.name, message: data.text, location:tweetLocation})
+
+            }
         });
     });
 }
-
-
 
 // Google geo coder
 function cityStream(socket, city) {
@@ -89,20 +89,25 @@ function cityStream(socket, city) {
             var info = eval("value = (" + body + ")");
             if (info.results) {
                 var bestMatch = info.results[0],
-                    bounds = bestMatch.geometry.bounds;
+                    bounds = bestMatch.geometry.bounds,
+                    twitterBoundingBox = formatBoundingBox(bounds),
+                    location = bestMatch.geometry.location;
 
-                var twitterBoundingBox = formatBoundingBox(bounds);
+                socket.emit('cityLocation', location);
                 startStream(socket, twitterBoundingBox);
             }
         }
     });
 }
 
+// format google response to be processed by twitter api
 function formatBoundingBox(geoLocation) {
     return geoLocation.southwest.lng + "," + geoLocation.southwest.lat + "," +
            geoLocation.northeast.lng + "," + geoLocation.northeast.lat + ",";
 
 }
+
+//Google Map
 
 
 
