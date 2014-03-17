@@ -13,6 +13,7 @@ var express = require('express'),
     jade = require('jade'),
     http = require('http'),
     twitter = require('ntwitter'),
+    request = require('request'),
     app = express(),
     server = http.createServer(app),
     io = require('socket.io').listen(server);
@@ -35,17 +36,27 @@ var twit = new twitter({
 
 
 // Routes
-
 app.get('/', function (req, res) {
     res.render(
         'home.jade'
     );
 });
 
+
+// Twitter Stream
+
 twit.stream('statuses/sample', function(stream) {
     stream.on('data', function (data) {
         console.log(data);
     });
 });
-// Twitter Stream
+
+// Google geo coder
+
+request('http://maps.googleapis.com/maps/api/geocode/json?address=New York,NJ&sensor=false', function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log(body); // Print the google web page.
+    }
+});
+
 
