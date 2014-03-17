@@ -42,22 +42,51 @@ app.get('/', function (req, res) {
     );
 });
 
+// websockets connection
+
+io.sockets.on('connection', function (socket) {
+
+    // add user to language queue
+    console.log('socket: ' + socket);
+
+    //
+    socket.on('search', function(city) {
+        cityStream(city);
+    });
+
+
+    socket.on('disconnect', function() {
+
+    })
+});
+
+
 
 // Twitter Stream
-
-twit.stream('statuses/sample', function(stream) {
-    stream.on('data', function (data) {
-        console.log(data);
+function startStream(boundingBox) {
+    twit.stream('statuses/sample', function(stream) {
+        stream.on('data', function (data) {
+            console.log(data);
+        });
     });
-});
+}
+
 
 
 // Google geo coder
+function cityStream(city) {
+    request('http://maps.googleapis.com/maps/api/geocode/json?address=' + city + '&sensor=false', function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body); // Print the lookup
 
-request('http://maps.googleapis.com/maps/api/geocode/json?address=New York,NJ&sensor=false', function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-        console.log(body); // Print the google web page.
-    }
-});
+
+        }
+    });
+}
+
+function formatBoundingBox(geoLocation) {
+
+}
+
 
 
