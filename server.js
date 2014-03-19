@@ -48,8 +48,9 @@ io.sockets.on('connection', function (socket) {
     console.log('socket: ' + socket);
 
     //
-    socket.on('search', function(city) {
-        cityStream(socket, city);
+    socket.on('search', function(data) {
+        console.log(data);
+        cityStream(socket, data.city, data.track);
     });
 
     socket.on('stop', function() {
@@ -64,37 +65,60 @@ io.sockets.on('connection', function (socket) {
     })
 });
 
-
-
 // Twitter Stream
-function startStream(socket, boundingBox) {
-    twit.stream('statuses/filter', {'locations':boundingBox}, function(stream) {
-        socket.stream = stream;
-        stream.on('data', function (data) {
-            var tweetLocation;
-            if(data.geo) {
-                tweetLocation = data.geo.coordinates;
-                socket.emit('tweet', {name: data.user.name, message: data.text, location:tweetLocation})
-
-            }
+function startStream(socket, filter, boundingBox) {
+        twit.stream('statuses/filter', filter, function(stream) {
+            var boxCorners = boundingBox.split(",");
+            socket.stream = stream;
+            stream.on('data', function (data) {
+                var tweetLocation;
+                if(data.geo) {
+                    tweetLocation = data.geo.coordinates;
+                    var lat = tweetLocation[0];
+                    var lng = tweetLocation[1];
+                    console.log(data.entities.hashtags);
+                    // check to make sure the tweet originated from city and is not just related to city
+                    if (lng >= boxCorners[0] && lng <= boxCorners[2] && lat >= boxCorners[1] && lat <= boxCorners[3])
+                    {
+                        socket.emit('tweet', {name: data.user.name, message: data.text, location:tweetLocation});
+                    }
+                }
+            });
         });
-    });
 }
 
 // Google geo coder
-function cityStream(socket, city) {
+function cityStream(socket, city, track) {
+    var filter,
+        info,
+        bestMatch,
+        bounds,
+        twitterBoundingBox,
+        location,
+        tracklist;
+
     request('http://maps.googleapis.com/maps/api/geocode/json?address=' + city + '&sensor=false', function (error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log(body); // Print the lookup
-            var info = eval("value = (" + body + ")");
+            info = eval("value = (" + body + ")");
             if (info.results) {
-                var bestMatch = info.results[0],
-                    bounds = bestMatch.geometry.bounds,
-                    twitterBoundingBox = formatBoundingBox(bounds),
-                    location = bestMatch.geometry.location;
+                bestMatch = info.results[0];
+                bounds = bestMatch.geometry.bounds;
+                twitterBoundingBox = formatBoundingBox(bounds);
+                location = bestMatch.geometry.location;
 
                 socket.emit('cityLocation', location);
-                startStream(socket, twitterBoundingBox);
+                 console.log(track);
+                tracklist = track.split(",");
+
+                if (tracklist[0] != '') {
+                    filter = {track:tracklist};
+                }
+                else {
+                    filter = {'locations':twitterBoundingBox};
+                }
+
+                startStream(socket, filter, twitterBoundingBox);
             }
         }
     });
@@ -106,8 +130,3 @@ function formatBoundingBox(geoLocation) {
            geoLocation.northeast.lng + "," + geoLocation.northeast.lat + ",";
 
 }
-
-//Google Map
-
-
-

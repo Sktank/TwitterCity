@@ -62,7 +62,7 @@ $(function() {
     socket.on('cityLocation', function(location) {
         console.log(location);
         map.setCenter(new google.maps.LatLng(location.lat, location.lng));
-        map.setZoom(8);
+        map.setZoom(10);
     });
 
 
@@ -73,7 +73,7 @@ $(function() {
     function searchCity() {
         if ($('#city-input').val() != "" && streaming == false)
         {
-            socket.emit('search', $('#city-input').val());
+            socket.emit('search', {city:$('#city-input').val(), track:$('#tag-input').val()});
             streaming = true;
         }
     }
