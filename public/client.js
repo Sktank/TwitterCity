@@ -1,6 +1,4 @@
 
-
-
 $(function() {
 
     // client side globals
@@ -9,6 +7,8 @@ $(function() {
     var map;
     var markersArray = [];
     var count = 0;
+    var words = {};
+    var wordCount = 0;
 
 
     // initialize the google map
@@ -28,6 +28,8 @@ $(function() {
         $('#tweet-box').empty();
         $('#tweet-info').empty();
         clearMap();
+        words = {};
+        wordCount = 0;
     });
 
 
@@ -57,6 +59,13 @@ $(function() {
             $('#tweet-info').html(newTweet);
         });
         count = count + 1;
+
+        // update Word Cloud
+        updateWordCloud(message);
+
+
+
+
     });
 
     socket.on('cityLocation', function(location) {
@@ -96,6 +105,40 @@ $(function() {
             markersArray[i].setMap(null);
         }
         markersArray.length = 0;
+    }
+
+
+    var boringWords = {'and':1, 'the':1, 'of':1, 'to':1, 'like':1, 'get':1, 'in':1,
+        'is':1, 'an':1, 'your':1, 'me':1, 'with':1, 'on':1, 'are':1,
+        'for':1, 'a':1, 'im':1, 'let':1, 'some':1, 'at':1, 'do':1,
+        'my':1, 'it':1, 'them':1, 'was':1, 'but':1, 'that':1, 'very':1,
+        'this':1, 'as':1, 'can':1, 'when':1, 'where':1, 'how':1, 'what':1,
+        'who':1, 'why':1, 'u':1, 'whats':1, 'must':1, 'you':1, 'i':1,
+        'these':1, 'just':1};
+
+    function updateWordCloud(message) {
+        var messageWords,
+            word;
+
+        //remove all punctuation
+        message = message.replace(/[\.,-\/#!$%\^&\*;:{}=\-"'_`~()]/g,"").replace(/\s{2,}/g," ");
+
+        console.log(message);
+        messageWords = message.split(" ");
+        for (var i = 0; i < messageWords.length; i++) {
+            word = messageWords[i];
+
+            if(!boringWords[word.toLowerCase()]) {
+                if (words[word]) {
+                    words[word] = words[word] + 1;
+                }
+                else {
+                    words[word] = 1;
+                }
+                wordCount = wordCount + 1
+            }
+        }
+        drawCloud(words, wordCount);
     }
 
 });
