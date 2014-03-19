@@ -14,10 +14,10 @@ var express = require('express'),
     http = require('http'),
     twitter = require('ntwitter'),
     request = require('request'),
+    keys = require('./keys'),
     app = express(),
     server = http.createServer(app);
     io = require('socket.io').listen(server);
-
 
 // Server Config
 
@@ -27,12 +27,11 @@ app.engine('html', ejs.renderFile);
 app.use(express.static(__dirname + '/public'));
 
 var twit = new twitter({
-    consumer_key: 'JLKj3orcc4N4l9H9RVfHw',
-    consumer_secret: 'bhhHXyDiQkQymlcR4jTCAAFYq6YirK0mrKJ3Loxc0',
-    access_token_key: '2394477463-fQf4XuEIYNO6W70BD7xtiXcWzcgd1Or9cdab8cU',
-    access_token_secret: '5Il4HWeqCab1Z1sPF1W7DuIlPOM6cSp4H6aQQ1C0jiFnC'
+    consumer_key: keys.consumer_key,
+    consumer_secret: keys.consumer_secret,
+    access_token_key: keys.access_token_key,
+    access_token_secret: keys.access_token_secret
 });
-
 
 // Routes
 app.get('/', function (req, res) {
