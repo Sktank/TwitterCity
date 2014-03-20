@@ -7,8 +7,16 @@ $(function() {
     var map;
     var markersArray = [];
     var count = 0;
+
+    // hashtag word cloud
+    var hashtags = {};
+    var hashtagCount = 0;
+    var canDrawHashtagCloud = true;
+
+    // message word cloud
     var words = {};
     var wordCount = 0;
+    var canDrawCloud = true;
 
 
     // initialize the google map
@@ -30,6 +38,8 @@ $(function() {
         clearMap();
         words = {};
         wordCount = 0;
+        hashtags = {};
+        hashtagCount = 0;
     });
 
 
@@ -50,7 +60,7 @@ $(function() {
             position: geoLocation,
             map: map,
             title: message,
-            icon: '/twitter-icon-map-tiny-2.png'
+            icon: '/img/twitter-icon-map-tiny-2.png'
         });
         markersArray.push(marker);
 
@@ -84,6 +94,7 @@ $(function() {
         {
             socket.emit('search', {city:$('#city-input').val(), track:$('#tag-input').val()});
             streaming = true;
+            trimWordCloud();
         }
     }
 
@@ -107,18 +118,12 @@ $(function() {
         markersArray.length = 0;
     }
 
-
-    var boringWords = {'and':1, 'the':1, 'of':1, 'to':1, 'like':1, 'get':1, 'in':1,
-        'is':1, 'an':1, 'your':1, 'me':1, 'with':1, 'on':1, 'are':1,
-        'for':1, 'a':1, 'im':1, 'let':1, 'some':1, 'at':1, 'do':1,
-        'my':1, 'it':1, 'them':1, 'was':1, 'but':1, 'that':1, 'very':1,
-        'this':1, 'as':1, 'can':1, 'when':1, 'where':1, 'how':1, 'what':1,
-        'who':1, 'why':1, 'u':1, 'whats':1, 'must':1, 'you':1, 'i':1,
-        'these':1, 'just':1};
+    var stopWords = /^(still|tell|want|got|youre|means|going|gonna|like|just|thats|u|\?|dont|w|get|@\.\.\.|hes|come|also|para|que|en|really|know|shes|way|yeah|fr|go|last|guys|el|lol|ur|ok|@|oh|im|i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall)$/;
 
     function updateWordCloud(message) {
         var messageWords,
-            word;
+            word,
+            cloudRedrawTime = 3000;
 
         //remove all punctuation
         message = message.replace(/[\.,-\/#!$%\^&\*;:{}=\-"'_`~()]/g,"").replace(/\s{2,}/g," ");
@@ -128,7 +133,7 @@ $(function() {
         for (var i = 0; i < messageWords.length; i++) {
             word = messageWords[i];
 
-            if(!boringWords[word.toLowerCase()]) {
+            if(!word.toLowerCase().match(stopWords)) {
                 if (words[word]) {
                     words[word] = words[word] + 1;
                 }
@@ -138,7 +143,75 @@ $(function() {
                 wordCount = wordCount + 1
             }
         }
-        drawCloud(words, wordCount);
+
+
+        // only redraw once every given number of seconds
+        if (canDrawCloud) {
+            canDrawCloud = false;
+            drawCloud(words, wordCount);
+            setTimeout(function() {
+                canDrawCloud = true;
+            }, cloudRedrawTime);
+        }
+
+        // delete words that are not helping
+        if (wordCount > 10000) {
+            for (var wordItem in words) {
+                if (words[wordItem] < 3) {
+
+                }
+            }
+        }
     }
 
+    function loopTrimWordCloud() {
+        var interval = 20000;
+        function trimWordCloud() {
+            if (streaming) {
+                for (var wordItem in words) {
+                    if (words[wordItem] < 3) {
+                        delete words[wordItem];
+                    }
+                }
+                setTimeout( trimWordCloud(), interval );
+            }
+        }
+        setTimeout(trimWordCloud(), interval );
+    }
 });
+
+
+//function updateWordCloud2(cloudId, message, words, wordCount, canDraw) {
+//    var messageWords,
+//        word,
+//        cloudRedrawTime = 5000;
+//
+//    //remove all punctuation
+//    message = message.replace(/[\.,-\/#!$%\^&\*;:{}=\-"'_`~()]/g,"").replace(/\s{2,}/g," ");
+//
+//    console.log(message);
+//    messageWords = message.split(" ");
+//    for (var i = 0; i < messageWords.length; i++) {
+//        word = messageWords[i];
+//
+//        if(!boringWords[word.toLowerCase()]) {
+//            if (this[words][word]) {
+//                this[words][word] = this[words][word] + 1;
+//            }
+//            else {
+//                this[words][word] = 1;
+//            }
+//            this[wordCount] = this[wordCount] + 1
+//        }
+//    }
+//
+//    if (this[canDraw]) {
+//        this[canDraw] = false;
+//        drawCloud(cloudId, this[words], this[wordCount]);
+//
+//        setTimeout(function() {
+//            this[canDraw] = true;
+//        }, cloudRedrawTime);
+//    }
+//    // only redraw cloud once every 10 seconds max
+//}
