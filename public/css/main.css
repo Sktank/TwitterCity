@@ -3,11 +3,7 @@
 }
 
 #tweet-box {
-    height: 500px;
-    width: 100%;
-    border: 1px solid black;
     overflow: auto;
-    margin-bottom: 100px;
     padding: 20px;
 }
 
@@ -29,4 +25,20 @@
 
 #tag-input {
     width: 253px;
+}
+
+.vis-feature {
+    width: 100%;
+    height: 300px;
+    border: 1px solid black;
+    border-radius: 5px;
+
+}
+
+#tweet-cloud {
+    margin: auto;
+}
+
+#hash-tweet-cloud {
+    margin: auto;
 }

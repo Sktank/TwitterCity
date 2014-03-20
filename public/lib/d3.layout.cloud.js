@@ -11,7 +11,8 @@
         rotate = cloudRotate,
         padding = cloudPadding,
         spiral = archimedeanSpiral,
-        words = [],
+        words = {id:null, words:null, width:null},
+//        words = [],
         timeInterval = Infinity,
         event = d3.dispatch("word", "end"),
         timer = null,
@@ -20,10 +21,11 @@
     cloud.start = function() {
       var board = zeroArray((size[0] >> 5) * size[1]),
           bounds = null,
-          n = words.length,
+          n = words.words.length,
           i = -1,
           tags = [],
-          data = words.map(function(d, i) {
+          data = {};
+          data.words = words.words.map(function(d, i) {
             d.text = text.call(this, d, i);
             d.font = font.call(this, d, i);
             d.style = fontStyle.call(this, d, i);
@@ -33,6 +35,8 @@
             d.padding = padding.call(this, d, i);
             return d;
           }).sort(function(a, b) { return b.size - a.size; });
+          data.width = words.width;
+          data.id = words.id;
 
       if (timer) clearInterval(timer);
       timer = setInterval(step, 0);
@@ -44,10 +48,12 @@
         var start = +new Date,
             d;
         while (+new Date - start < timeInterval && ++i < n && timer) {
-          d = data[i];
+          d = data.words[i];
           d.x = (size[0] * (Math.random() + .5)) >> 1;
           d.y = (size[1] * (Math.random() + .5)) >> 1;
-          cloudSprite(d, data, i);
+          d.globalWidth = data.width;
+          d.globalId = data.id;
+          cloudSprite(d, data.words, i);
           if (d.hasText && place(board, d, bounds)) {
             tags.push(d);
             event.word(d);
@@ -131,6 +137,7 @@
 
     cloud.words = function(x) {
       if (!arguments.length) return words;
+      console.log(x);
       words = x;
       return cloud;
     };

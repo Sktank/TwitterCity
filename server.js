@@ -76,11 +76,19 @@ function startStream(socket, filter, boundingBox) {
                     tweetLocation = data.geo.coordinates;
                     var lat = tweetLocation[0];
                     var lng = tweetLocation[1];
-                    console.log(data.entities.hashtags);
+
                     // check to make sure the tweet originated from city and is not just related to city
                     if (lng >= boxCorners[0] && lng <= boxCorners[2] && lat >= boxCorners[1] && lat <= boxCorners[3])
                     {
-                        socket.emit('tweet', {name: data.user.name, message: data.text, location:tweetLocation});
+                        // get the hashtags
+                        var unformattedHashtags = data.entities.hashtags;
+                        var hashtagList = [];
+                        for (var i = 0; i < unformattedHashtags.length; i++) {
+                            hashtagList.push(unformattedHashtags[i].text)
+                        }
+                        var hashtags = hashtagList.join(" ");
+                        console.log(data.entities.hashtags);
+                        socket.emit('tweet', {name: data.user.name, message: data.text, location:tweetLocation, tags:hashtags});
                     }
                 }
             });
