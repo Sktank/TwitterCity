@@ -1,0 +1,65 @@
+1) Data Visualization
+
+    Admittedly, I am writing this after I have implemented the code for my visualization, so rather than being a plan,
+    this is more of a walk through of what I have done. Below is a list of the steps I took to implement my visualizer.
+
+    1) Set up a basic node web server. This was done using the express framework with the node templating engine ejs.
+
+    2) Integration of sockets.io, a node websockets library that allows real time communication between client side and
+    server side code. This is essential if we want the server to be pushing real time data to the client.
+
+    3) Initiate a stream of real time tweets and push the incoming tweets to the client code.
+    I found a good node library to do this called ntwitter.
+
+    4) At this point I decided to have the user search for a city and only receive tweets from that city. I decided
+    to visualize this by plotting the tweet locations on a google map.
+
+    5) Search for city coordinates with google geolocations api.
+
+    6) Embed a google map and center the google map on the coordinates of the searched city.
+
+    7) Plot a twitter icon on the map at the location of the incoming tweet and also display the live tweet message
+    next to the map.
+
+    8) I was enjoying the project at this point, but felt that the google maps feature was not a good enough visualization.
+    Therefore I decided to create word clouds for the tweet hash tags and tweet messages.
+
+    9) Integration of d3 word cloud library.
+
+    10) Find best method to display information in word cloud format.
+
+    In total I spent about 12 hours working on this project.
+    Steps 1-7 took 5 about hours.
+    Steps 8-10 took 7 about hours.
+
+2) Document Similarity
+
+    I think making similarity calculations for images would be really interesting because there are many different ways
+    to analyze images. Overall, I would focus on scene recognition.
+
+    1) One of the fastest and easiest things you could do to compare images is just look at the average pixel value.
+    In other words, reduce the entirety of an image to one RGB value. Then, one way to use this data would be to create a
+    bunch of naive bayes binary classifiers and train them on different categories of images (i,e - ocean, street, forrest).
+    This is an extremely naive approach, but in general, ocean images will have more blue, while forrest images might
+    have more green.
+        To make this more robust, instead of reducing the image to 1 average pixel value, you could partition the image
+    into an m x n grid. Then for each cell in the grid, find the average pixel value. What you are left with is a
+    'summary' of the image that can help you classify it into a specific scene.
+
+    2) A far more accurate although significantly more complex method of doing scene recognition is to detect objects
+    in an image and then choose a specific scene category based on the present objects. For example if we detect
+    2 chickens, a cow, and a goat, we are probably looking at an image of a farm.
+        Object detection can be done using a window is sliding window approach in which a window is slid around an image and at
+    each location the probability of a specific object being contained in the window is computed. The descriptors
+     of an object category can be computed by training on labeled data using a machine learning algorithm such as
+    Adaboost. For the underlying features of an object descriptor, one could use pixel luminance values or sift features
+    (Histogram of gradients).
+        You could then train scene descriptors that would be a histogram of objects and try to classify an image as a
+     scene based on its objects.
+
+     3) One more cool thing you could do is to see if the images are of the same scene, but maybe at a different scale or
+     angle, or taken from a different location.  This could be done by first detecting features in both images
+     using sift or harris corner feature detection methods. Then, you would create feature descriptors for each of
+     these features using a vector of pixel values or a histogram of gradients. Next, you would try to match feature
+     descriptors in both images. If there are enough good matches with the same spacial layout, (only need about 4 good matches)
+     then you know you are looking at the same scene.
