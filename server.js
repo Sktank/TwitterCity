@@ -8,7 +8,6 @@
 
 
 // Node Imports
-
 var express = require('express'),
     ejs = require('ejs'),
     http = require('http'),
@@ -44,20 +43,19 @@ app.get('/', function (req, res) {
 // websockets connection
 io.sockets.on('connection', function (socket) {
 
-    // add user to language queue
-    console.log('socket: ' + socket);
-
-    //
+    // When the search button is clicked
     socket.on('search', function(data) {
         console.log(data);
         cityStream(socket, data.city, data.track);
     });
 
+    // When the stop button is clicked
     socket.on('stop', function() {
         socket.stream.destroy();
     });
 
 
+    // when you leave the page
     socket.on('disconnect', function() {
         if (socket.stream) {
             socket.stream.destroy();
@@ -65,7 +63,7 @@ io.sockets.on('connection', function (socket) {
     })
 });
 
-// Twitter Stream
+// Initiate the Twitter Stream and pass the incoming tweets to the client
 function startStream(socket, filter, boundingBox) {
         twit.stream('statuses/filter', filter, function(stream) {
             var boxCorners = boundingBox.split(",");
@@ -95,7 +93,7 @@ function startStream(socket, filter, boundingBox) {
         });
 }
 
-// Google geo coder
+// Look up a city with google geolocations and pass its bounding box to startStream
 function cityStream(socket, city, track) {
     var filter,
         info,

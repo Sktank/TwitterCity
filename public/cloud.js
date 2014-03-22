@@ -31,37 +31,24 @@ function draw(data) {
     }
 }
 
-function drawCloud(cloudId, words, totalCount) {
+function drawCloud(cloudId, words, numTerms) {
+    var wordsList = [],
+        mostCommonWordsList = [],
+        finalWordsList = null,
+        width;
 
-    var wordsList = [];
     for (var word in words) {
         wordsList.push({text:word, count:words[word]})
     }
     wordsList.sort(function(a,b) {
         return b.count - a.count
     });
-    var mostCommonWordsList = [];
-    var numTerms = 0;
-    var finalWordsList = null;
 
-    var width = $(cloudId).width();
-
-    // message cloud specific terms
-    if (cloudId == '#tweet-cloud'){
-        numTerms = 50;
-        mostCommonWordsList = wordsList.slice(0,numTerms);
-        finalWordsList = mostCommonWordsList.map(function(item, index) {
-            return {text:item.text, size:(51-index)}
-        })
-    }
-    // hashtag cloud specific terms
-    else if (cloudId === '#hash-tweet-cloud') {
-        numTerms = 25;
-        mostCommonWordsList = wordsList.slice(0,numTerms);
-        finalWordsList = mostCommonWordsList.map(function(item, index) {
-            return {text:item.text, size:(51-index)}
-        })
-    }
+    width = $(cloudId).width();
+    mostCommonWordsList = wordsList.slice(0,numTerms);
+    finalWordsList = mostCommonWordsList.map(function(item, index) {
+        return {text:item.text, size:(51-index)}
+    });
 
     d3.layout.cloud().size([width, 300])
         .words({id:cloudId, words:finalWordsList, width:width})

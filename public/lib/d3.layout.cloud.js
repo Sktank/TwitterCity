@@ -12,7 +12,6 @@
         padding = cloudPadding,
         spiral = archimedeanSpiral,
         words = {id:null, words:null, width:null},
-//        words = [],
         timeInterval = Infinity,
         event = d3.dispatch("word", "end"),
         timer = null,
