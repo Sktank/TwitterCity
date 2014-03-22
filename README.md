@@ -7,7 +7,7 @@ Search for a city to get a live stream of its tweets along with a google maps vi
 =======================
 Dependencies
 
--node
+Node
 
     -ejs
 
